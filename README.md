@@ -2,33 +2,10 @@
 
 The kuverse.app is an application designed to empower NFT (Non-Fungible Token) holders by providing them with a user-friendly platform to manage and monetize their NFT assets. The app will focus on the user experience, allowing for seamless and clean usability for everyone.
 
-## Install server dependencies
+original repository: https://github.com/KuverseApp/kuverse-mvp
 
-```bash
-npm install
-```
+## Bugfix
 
-## Install client dependencies
+1. I created the `WalletAddres` component that returns a `div` with the connected metamask address. And I placed it in `Profile.js`.
 
-```bash
-cd client
-npm install
-```
-
-## Run both Express & React from root project-directory
-
-```bash
-npm run dev
-```
-
-## Build for production
-
-```bash
-cd client
-npm run build
-```
-
-## Test production before deploy
-
-```bash
-NODE_ENV=production node server.js
+2. The bug occurred because the connector did not connect to the provider on each refresh. I solved the problem of logging out on page reload by storing the connectorIndex in localStorage. Then, in useEffect, I retrieved that index and used it to access the correct connector within the connectors array. This ensured that when I restarted the application, the connection was reestablished correctly without losing the login state.
