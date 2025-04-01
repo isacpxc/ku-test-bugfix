@@ -52,7 +52,7 @@ const MainConetent = styled.div`
   }
   @media ${device.laptopS} {
     width: 100%;
-  justify-content: space-between;
+    justify-content: space-between;
     .desk-markt {
       display: none;
     }
@@ -65,7 +65,7 @@ const MainConetent = styled.div`
   }
   @media ${device.tablet} {
     display: flex;
-    width:100%;
+    width: 100%;
     .desk-markt {
       display: none;
     }
@@ -149,7 +149,7 @@ function App() {
   const { account, library, activate, active, connector, deactivate } =
     useWeb3React();
   const connectAccount = () => {
-    console.log("come here")
+    console.log("come here");
     setConnectModalOpen(true);
   };
   const connectToProvider = (connector) => {
