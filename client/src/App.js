@@ -143,6 +143,7 @@ function App() {
   const [networkError, setNetworkError] = useState(null);
   const [errorType, setErrorType] = useState("unknown");
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
+  const web3ReactContext = useWeb3React();
 
   useAxios();
 
@@ -153,9 +154,17 @@ function App() {
     setConnectModalOpen(true);
   };
   const connectToProvider = (connector) => {
+    // alert();
+    const connectorKey = window.localStorage.getItem(connectorLocalStorageKey);
+    // console.log("Conector recuperado do localStorage:", connectorKey);
+
+    const currentConnector = getConnector(connectorKey);
+    // console.log("Objeto do conector:", currentConnector);
+
+    // alert("Tentando conectar ao provedor:", connector);
     let _tried = false;
     let _triedError = undefined;
-    const connectorKey = window.localStorage.getItem(connectorLocalStorageKey);
+
     if (connectorKey && connectorKey !== "") {
       const currentConnector = getConnector(connectorKey);
       if (connectorKey === "injectedConnector") {
@@ -187,6 +196,10 @@ function App() {
     activate(connector);
   };
   // handle logic to recognize the connector currently being activated
+  const getWalletAddress = () => {
+    return web3ReactContext.account;
+  };
+
   const [activatingConnector, setActivatingConnector] = React.useState();
   const { activateError } = useInactiveListener(!!activatingConnector);
   // handling connection error
@@ -200,6 +213,7 @@ function App() {
   const handleLogout = async () => {
     deactivate();
     window.localStorage.removeItem(connectorLocalStorageKey);
+    window.localStorage.removeItem("connectorIndex");
     setLogoutModalOpen(false);
   };
   const openLogoutModal = () => {
@@ -242,6 +256,16 @@ function App() {
     }
   };
   useEffect(() => {
+    const initializeConnection = async () => {
+      const storedConnectorKey = localStorage.getItem("connectorId");
+      const storedConnectorIndex = localStorage.getItem("connectorIndex");
+
+      if (storedConnectorKey && storedConnectorIndex) {
+        await connectToProvider(connectors[storedConnectorIndex].connectorId);
+      }
+    };
+    // handleLogout();
+    initializeConnection();
     extensionKuSetup(true);
     saveKuwallet(null);
   }, []);
@@ -424,6 +448,20 @@ function App() {
                               connectorLocalStorageKey,
                               entry.key
                             );
+                            window.localStorage.setItem(
+                              "connectorIndex",
+                              index
+                            );
+
+                            // window.localStorage.setItem(
+                            //   "connectorEntry",
+                            //   JSON.stringify(entry)
+                            // );
+                            // console.log("connectorEntry modal: ", entry);
+                            // console.log(
+                            //   "tipo=ELE PASSA ISSO AQUI:",
+                            //   typeof entry.connectorId
+                            // );
                             connectToProvider(entry.connectorId);
                             setConnectModalOpen(false);
                           }}
