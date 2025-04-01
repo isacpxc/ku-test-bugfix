@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useWeb3React } from "@web3-react/core";
 import axios from "axios";
+import WalletAddress from "../../WalletAddress";
 import {
   Inventory,
   InventoryItems,
@@ -94,6 +95,7 @@ export const Profile = (props) => {
                 isOpen={toggle}
                 closeOverlay={closeOverlay}
               />
+              <WalletAddress />
               <Inventory>
                 <InventoryItemsDiv>
                   {ownedItems.map((item, index) => (
